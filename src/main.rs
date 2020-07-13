@@ -1,14 +1,15 @@
 mod vm;
 
-use vm::{OpCode, Typed, VM};
+use vm::{Chunk, InterpretError, OpCode, Typed, VM};
 
-fn main() {
+fn main() -> Result<(), InterpretError> {
     let mut vm = VM::default();
+    let mut c = Chunk::default();
 
-    vm.push_constant_op(Typed::Int(3), 1000);
-    vm.push_op(OpCode::Return, 1000);
+    c.push_constant_op(Typed::Int(15), 1);
+    c.push_op(OpCode::Return, 1);
 
-    let mut output = String::default();
-    vm.disassemble(&mut output, "TEST");
-    println!("{}", output);
+    vm.interpret(&c)?;
+
+    Ok(())
 }
